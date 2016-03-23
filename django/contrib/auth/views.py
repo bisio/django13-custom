@@ -139,7 +139,7 @@ def password_reset(request, is_admin_site=False,
                    current_app=None,
                    extra_context=None):
     if post_reset_redirect is None:
-        post_reset_redirect = reverse('django.contrib.auth.views.password_reset_done')
+        post_reset_redirect = reverse('django.contrib.auth.views.password_reset_done', urlconf=getattr(request, 'urlconf', None))
     if request.method == "POST":
         form = password_reset_form(request.POST)
         if form.is_valid():
@@ -185,7 +185,7 @@ def password_reset_confirm(request, uidb36=None, token=None,
     """
     assert uidb36 is not None and token is not None # checked by URLconf
     if post_reset_redirect is None:
-        post_reset_redirect = reverse('django.contrib.auth.views.password_reset_complete')
+        post_reset_redirect = reverse('django.contrib.auth.views.password_reset_complete', urlconf=getattr(request, 'urlconf', None))
     try:
         uid_int = base36_to_int(uidb36)
         user = User.objects.get(id=uid_int)
@@ -230,7 +230,7 @@ def password_change(request,
                     password_change_form=PasswordChangeForm,
                     current_app=None, extra_context=None):
     if post_change_redirect is None:
-        post_change_redirect = reverse('django.contrib.auth.views.password_change_done')
+        post_change_redirect = reverse('django.contrib.auth.views.password_change_done', urlconf=getattr(request, 'urlconf', None))
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():
